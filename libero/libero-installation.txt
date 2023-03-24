@@ -1,0 +1,29 @@
+Introduction
+
+Libero SOC is a proprietary FPGA design software from Microsemi, formerly Actel. It has a free one year licence option with some restrictions. Current version is 11.2. This page contains tweaks to get it working in 64bit Ubuntu 12.04 LTS. Currently most things work but the help is missing something to launch a webbrowser.
+
+Update: having issues with version 11.4 and Ubuntu 14.04 LTS. Designer often segfaults with a designer_bin[21388]: segfault at d0 ip 00000000f140671d sp 00000000ff8b3100 error 6 in libolejpeg50.so[f13e9000+20000]
+
+Installation
+
+Prerequisits
+
+Install the following packages:
+libmotif4:i386 libmotif3 libmotif-dev nspluginwrapper lib32z1 libc6-i386 rpcbind xfonts-100dpi xfonts-75dpi ksh
+Run the rpcbind with -i, this is sometimes deemed unsafe so be advised.
+Create a tmp folder wich is writeable in /usr
+Add fonts, this step might not be necessary since i think a reboot after the installation of the xfonts was the actual solution. *SystemFontSpec:-adobe-utopia-bold-i-normal--0-0-0-0-p-0-adobe-standard *SystemFont:-adobe-utopia-bold-i-normal--0-0-0-0-p-0-adobe-standard
+
+
+Script to do all these things
+
+sudo apt-get install libmotif3 libmotif-dev libmotif4:i386 nspluginwrapper lib32z1 libc6-i386 rpcbind xfonts-100dpi xfonts-75dpi ksh
+
+echo 'OPTIONS="-w -i"' | sudo tee /etc/default/rpcbind
+sudo service rpcbind restart
+sudo mkdir /usr/tmp
+sudo chmod uga+rwx /usr/tmp
+echo "*SystemFontSpec:-adobe-utopia-bold-i-normal--0-0-0-0-p-0-adobe-standard" > font_tmp.txt
+echo "*SystemFont:-adobe-utopia-bold-i-normal--0-0-0-0-p-0-adobe-standard" >> font_tmp.txt
+xrdb -merge font_tmp.txt
+
