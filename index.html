@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Install Microsemi Libero 12.1 on Ubuntu 18.04 | bob]bl[og</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Install Microsemi Libero 12.1 on Ubuntu 18.04" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is how I installed Libero SoC v12.1 on Ubuntu 18.04 LTS (Bionic Beaver). What helped me a lot where the instructions to install Libero on Debian and Arch Linux" />
+<meta property="og:description" content="This is how I installed Libero SoC v12.1 on Ubuntu 18.04 LTS (Bionic Beaver). What helped me a lot where the instructions to install Libero on Debian and Arch Linux" />
+<link rel="canonical" href="https://bobbl.github.io/fpga/microsemi/2019/09/23/install-libero.html" />
+<meta property="og:url" content="https://bobbl.github.io/fpga/microsemi/2019/09/23/install-libero.html" />
+<meta property="og:site_name" content="bob]bl[og" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-23T20:16:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Install Microsemi Libero 12.1 on Ubuntu 18.04" />
+<script type="application/ld+json">
+{"description":"This is how I installed Libero SoC v12.1 on Ubuntu 18.04 LTS (Bionic Beaver). What helped me a lot where the instructions to install Libero on Debian and Arch Linux","url":"https://bobbl.github.io/fpga/microsemi/2019/09/23/install-libero.html","@type":"BlogPosting","headline":"Install Microsemi Libero 12.1 on Ubuntu 18.04","dateModified":"2019-09-23T20:16:00+00:00","datePublished":"2019-09-23T20:16:00+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://bobbl.github.io/fpga/microsemi/2019/09/23/install-libero.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://bobbl.github.io/feed.xml" title="bob]bl[og" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">bob]bl[og</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Install Microsemi Libero 12.1 on Ubuntu 18.04</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-09-23T20:16:00+00:00" itemprop="datePublished">Sep 23, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This is how I installed Libero SoC v12.1 on Ubuntu 18.04 LTS (Bionic Beaver).
+What helped me a lot where the instructions to install Libero on
+<a href="http://www.fabienm.eu/flf/installing-libero-on-debian-9">Debian</a>
+and <a href="https://wiki.archlinux.org/index.php/Microsemi_Libero">Arch Linux</a></p>
+
+<h2 id="get-license">Get License</h2>
+
+<p>Create a directory for the license server (here I use <code class="language-plaintext highlighter-rouge">~/.local/microsemi/license</code>)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir --p /home/USERNAME/.local/microsemi/license
+</code></pre></div></div>
+
+<p>Download the “Linux Licensing Daemon” from
+<a href="https://www.microsemi.com/product-directory/design-resources/1711-licensing#downloads">https://www.microsemi.com/product-directory/design-resources/1711-licensing#downloads</a>
+to the license directory and extract it with</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar xf Linux_Licensing_Daemon.tar.gz
+</code></pre></div></div>
+
+<p>Create an account on <www.microsemi.com> and request a 
+"Libero Silver 1Yr Floating License for Windows/Linux Server".
+You have to enter your MAC address (12 hexadecimal digits without
+colons), which you can get by typing</www.microsemi.com></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip link | grep ether
+</code></pre></div></div>
+
+<p>The license file is sent via email. Store the license file <code class="language-plaintext highlighter-rouge">License.dat</code> in
+the license directory.</p>
+
+<p>Now the first four lines of the license file must be edited, but <em>not the rest
+of the file</em>. In the first line, replace <code class="language-plaintext highlighter-rouge">&lt;put.hostname.here&gt;</code> by 
+<code class="language-plaintext highlighter-rouge">localhost</code>. In lines 2 to 4 replace <code class="language-plaintext highlighter-rouge">PATH</code> by the absolute path to the
+license daemon directory. The first 4 lines schould then look like that:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SERVER localhost 112233445566 1702
+DAEMON actlmgrd /home/USERNAME/microsemi/license/Linux_Licensing_Daemon/actlmgrd
+DAEMON mgcld /home/USERNAME/microsemi/license/Linux_Licensing_Daemon/mgcld
+VENDOR snpslmd /home/USERNAME/microsemi/license/Linux_Licensing_Daemon/snpslmd
+</code></pre></div></div>
+
+<p>Install the depedencies</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install lsb
+</code></pre></div></div>
+
+<p>And start the license server with</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Linux_Licensing_Daemon/lmgrd -c License.dat -log /tmp/lmgrd.log
+</code></pre></div></div>
+
+<h2 id="install-libero">Install Libero</h2>
+
+<p>Download “Libero SoC v12.1 for Linux” from
+<a href="https://www.microsemi.com/product-directory/design-resources/1750-libero-soc#downloads">https://www.microsemi.com/product-directory/design-resources/1750-libero-soc#downloads</a>.</p>
+
+<p>The downloaded binary is a self-extracting archive built with InstallAnywhere.
+Before executing it, set its execute bit must be set and some dependencies have
+to be installed:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install libxtst6:i386 libqtgui4:i386 libxrender1:i386 apt-file
+chmod +x Libero_SoC_v12.1_lin.bin
+./Libero_SoC_v12.1_lin.bin
+</code></pre></div></div>
+
+<p>Now the graphical installer should be launched. If not, there are still some
+library dependencies unresolved. From my experience, the console mode
+installation does not work at all. Quit it by typing <code class="language-plaintext highlighter-rouge">quit</code> and try to
+install additional X or Qt libraries until the graphical installer is started.</p>
+
+<p>Within the graphical installer, I recommend to change the install path to
+<code class="language-plaintext highlighter-rouge">/home/USERNAME/.local/microsemi/Libero_SoC-v12.1</code> and the common directory
+to <code class="language-plaintext highlighter-rouge">/home/USERNAME/.local/microsemi/common</code>. Otherwise you need root
+permissions whenever Libero updates the IP cores.</p>
+
+<p>libz must be removed:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rm /home/USERNAME/.local/microsemi/Libero:SoC-v12.1/Libero/lib/libz.so.1
+</code></pre></div></div>
+
+<p>Install dependencies:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt install libmotif-dev libglib2.0-0:i386 libfreetype6:i386 \
+    libsm6:i386 libfontconfig1:i386 libpulse0:i386 libqt5gui5:i386
+</code></pre></div></div>
+
+<p>libpng12-0 must be installed manually (source: <a href="https://www.linuxuprising.com/2018/05/fix-libpng12-0-missing-in-ubuntu-1804.html">https://www.linuxuprising.com/2018/05/fix-libpng12-0-missing-in-ubuntu-1804.html</a>).
+Both the 32 bit version (for Libero itself) and the 64 bit version (for the chip planner) are required.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget http://security.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1.1_i386.deb
+wget http://security.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
+sudo apt install ./libpng12-0_1.2.54-1ubuntu1.1_i386.deb
+sudo apt install ./libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
+</code></pre></div></div>
+
+<p>The Libero scripts have the shebang <code class="language-plaintext highlighter-rouge">#!/bin/sh</code> although bash syntax is used.
+Therefore dash must be disabled by</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dpkg-reconfigure dash
+</code></pre></div></div>
+
+<p>and choosing “No”.</p>
+
+<p>Before actually starting Libero, some environment variables have to be set:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export LM_LICENSE_FILE=1702@localhost
+export SNPSLMD_LICENSE_FILE=1702@localhost
+export LD_LIBRARY_PATH=/usr/lib/i386-linux-gnu/:/usr/lib/x86_64-linux-gnu/:/usr/lib
+/home/USERNAME/.local/microsemi/Libero/bin/libero
+</code></pre></div></div>
+
+<h2 id="install-softconsole-60">Install SoftConsole 6.0</h2>
+
+<p>Dpendencies:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install build-essential libstdc++6:i386
+</code></pre></div></div>
+
+<p>Download the Installer and make it executable:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod +x Microsemi-SoftConsole-v6.0.0.116-Linux-x86_64-Installer
+./Microsemi-SoftConsole-v6.0.0.116-Linux-x86_64-Installer
+</code></pre></div></div>
+
+<p>Accept the license and set the destination location to 
+<code class="language-plaintext highlighter-rouge">/home/USERNAME/.local/microsemi/SoftConsole_v6.0</code></p>
+
+<p>Avoid root permission when accessing SoftConsole hardware:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo cp ~/.local/microsemi/SoftConsole_v6.0/openocd/share/openocd/contrib/60-openocd.rules /etc/udev/rules.d/
+</code></pre></div></div>
+
+
+  </div><a class="u-url" href="/fpga/microsemi/2019/09/23/install-libero.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">bob]bl[og</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">bob]bl[og</li><li><a class="u-email" href="mailto:bobbl@gmx.de">bobbl@gmx.de</a></li></ul>
+      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/bobbl"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">bobbl</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about everything that comes to my mind.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
+
